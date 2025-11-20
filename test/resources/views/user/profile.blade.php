@@ -25,37 +25,38 @@
                      Messagerie
                 </a>
 
-            </div>
-        </div>
-
-        {{-- 
-        <!-- Notifications sur la page -->
-        <div class="bg-white p-6 rounded-lg shadow mb-6">
-            <h2 class="text-2xl font-bold text-gray-800 mb-4">Toutes les notifications</h2>
-
-            @forelse(auth()->user()->notifications as $notification)
-                <div class="flex items-center justify-between p-4 border-b hover:bg-gray-50 rounded">
-                    <div>
-                        <p class="text-gray-800 font-semibold">{{ $notification->data['message'] }}</p>
-                        <small class="text-gray-500">{{ $notification->created_at->diffForHumans() }}</small>
+                <!-- Notifications -->
+                <div class="relative group">
+                    <button
+                        class="px-4 py-2 bg-pink-100 text-pink-800 rounded-lg hover:bg-pink-200 shadow">
+                        Notifications
+                    </button>
+                    <!-- Dropdown -->
+                    <div class="absolute right-0 mt-2 w-80 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">
+                        @forelse(auth()->user()->notifications as $notification)
+                            <div class="p-3 border-b hover:bg-gray-50 flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-800">{{ $notification->data['message'] }}</p>
+                                    <small class="text-gray-500">{{ $notification->created_at->diffForHumans() }}</small>
+                                </div>
+                                @if(!$notification->read_at)
+                                    <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
+                                        @csrf
+                                        <button type="submit"
+                                                class="text-xs text-white bg-pink-500 hover:bg-pink-600 px-2 py-1 rounded-lg shadow">
+                                            Marquer lu
+                                        </button>
+                                    </form>
+                                @endif
+                            </div>
+                        @empty
+                            <p class="p-3 text-gray-500">Aucune notification</p>
+                        @endforelse
                     </div>
-
-                    @if($notification->read_at === null)
-                        <form action="{{ route('notifications.markAsRead', $notification->id) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                    class="text-sm text-white bg-pink-500 hover:bg-pink-600 px-2 py-1 rounded-lg shadow">
-                                Marquer comme lu
-                            </button>
-                        </form>
-                    @endif
                 </div>
 
-            @empty
-                <p class="text-gray-500">Aucune notification pour le moment.</p>
-            @endforelse
+            </div>
         </div>
-        --}}
 
         <!-- Infos de compte -->
         <div class="bg-white p-6 rounded-lg shadow">

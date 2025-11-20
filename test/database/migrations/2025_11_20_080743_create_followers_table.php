@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('follower_id')->constrained('users')->onDelete('cascade');
             //TODO : Ajouter la colonne user_id (clé étrangère vers users)
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            //TODO: Empêcher qu'un même follower suive plusieurs fois le même utilisateur
+            //TODO : Empêcher qu'un même follower suive plusieurs fois le même utilisateur
             $table->unique(['follower_id', 'user_id']); 
             $table->timestamps();
         });

@@ -80,6 +80,21 @@ class ProfileController extends Controller
         return view('user.index', compact('users', 'followers', 'followings'));
     }
 
+    /**
+     * Marquer la notification comme lue
+     */
+
+    public function markAsRead($notificationId)
+    {
+        $notification = auth()->user()->notifications()->where('id', $notificationId)->first();
+
+        if ($notification) {
+            $notification->markAsRead();
+        }
+
+        return back();
+}
+
 
 
 

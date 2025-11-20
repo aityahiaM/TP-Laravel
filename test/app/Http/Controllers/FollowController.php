@@ -1,10 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use App\Notifications\NewFollowerNotification;
 
 class FollowController extends Controller
 {
@@ -17,8 +17,9 @@ class FollowController extends Controller
         $me = Auth::user();
         if (!$me->isFollowing($user)) {
             $me->followings()->attach($user->id);
+             $user->notify(new NewFollowerNotification($me));
         }
-        return back()->with('success', 'Vous suivez maintenant ' . $user->name);
+        return redirect()->back();
     }
 
     /**
@@ -30,6 +31,8 @@ class FollowController extends Controller
         if ($me->isFollowing($user)) {
             $me->followings()->detach($user->id);
         }
-        return back()->with('success', 'Vous ne suivez plus ' . $user->name);
+        return redirect()->back();;
     }
 }
+
+
