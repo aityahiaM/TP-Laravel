@@ -15,7 +15,7 @@ class PostController extends Controller
         $user = auth()->user();
         $followingIds = $user->followings()->pluck('users.id')->toArray();
         $followingIds[] = $user->id;
-        $posts = Post::with('user')
+ $posts = Post::with(['user', 'likers']) // ← Ajouter 'likers'
                      ->whereIn('user_id', $followingIds)
                      ->latest()
                      ->get();
@@ -45,6 +45,40 @@ class PostController extends Controller
         ]);
 
         return back()->with('success', 'Post créé !');
+    }
+
+    public function toggleLike(Request $request, Post $post)
+    {
+        $user = auth()->user();
+    
+        // Toggle like/unlike
+        $user->toggleLike($post);
+    
+    
+        // Récupérer l'état actuel
+        $isLiked = $user->hasLiked($post);
+        $likesCount = $post->likers()->count();
+    
+        return response()->json([
+            'success' => true,
+            'likes_count' => $likesCount,
+            'is_liked' => $isLiked,
+            'message' => $isLiked ? 'Post liké !' : 'Like retiré !'
+        ]);
+    }
+
+    public function storeComment(Request $request, Post $post)
+    {
+        $request->validate([
+            'content' => 'required|string|max:500',
+        ]);
+
+        $post->comments()->create([
+            'user_id' => auth()->id(),
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Commentaire ajouté !');
     }
 }
 

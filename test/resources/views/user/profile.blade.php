@@ -27,9 +27,14 @@
 
                 <!-- Notifications -->
                 <div class="relative group">
-                    <button
-                        class="px-4 py-2 bg-pink-100 text-pink-800 rounded-lg hover:bg-pink-200 shadow">
+                    <button class="px-4 py-2 bg-pink-100 text-pink-800 rounded-lg hover:bg-pink-200 shadow relative">
                         Notifications
+                        @if(auth()->user()->unreadNotifications->count() > 0)
+                            <span
+                                class="absolute -top-1 -right-1 bg-red-600 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">
+                                {{ auth()->user()->unreadNotifications->count() }}
+                            </span>
+                        @endif
                     </button>
                     <!-- Dropdown -->
                     <div class="absolute right-0 mt-2 w-80 bg-white border rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity">

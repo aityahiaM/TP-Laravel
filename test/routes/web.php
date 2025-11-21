@@ -38,6 +38,13 @@ Route::middleware('auth')->group(function () {
     //PARTIE POSTS 
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    
+
+    //PARTIE LIKE
+    Route::post('/posts/{post}/like', [PostController::class, 'toggleLike'])->name('posts.like.toggle');
+
+    //PARTIE COMMENTAIRE 
+    Route::post('/posts/{post}/comments', [PostController::class, 'storeComment'])->name('comments.store');
 });
 
 require __DIR__.'/auth.php';
